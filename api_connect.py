@@ -25,10 +25,16 @@ def data(market):
     stocks_data = response.json()
 
     # agregando fecha y hora que se extrajo la data
+    data_filtered = []
     now = datetime.now()
     date_string = now.strftime("%Y-%m-%d %H:%M:%S")
     for stock in stocks_data:
-        stock['date'] = date_string
+        stock['sector'] = '' if stock['sector'] is None else stock['sector']
+        stock['industry'] = '' if stock['industry'] is None else stock['industry']
+        stock['lastAnnualDividend'] = 0 if stock['lastAnnualDividend'] is None else stock['lastAnnualDividend']
+        if stock['isEtf'] is not None and stock['isFund'] is not None and stock['beta'] is not None and stock['country'] is not None:        
+            stock['date'] = date_string
+            data_filtered.append(stock)
 
         
     #Conexion y creacion de la tabla
@@ -55,7 +61,7 @@ def data(market):
                         beta DOUBLE PRECISION,
                         price DOUBLE PRECISION,
                         lastAnnualDividend DOUBLE PRECISION,
-                        volume INTEGER,
+                        volume DOUBLE PRECISION,
                         exchange VARCHAR(100),
                         exchangeShortName VARCHAR(10),
                         country VARCHAR(10),
@@ -66,6 +72,7 @@ def data(market):
                     )
                     """)
 
+    conn.commit()
 
 
     #Ingesta de los datos por batch
@@ -73,7 +80,7 @@ def data(market):
                     INSERT INTO leonel_aliaga_v_coderhouse.stocks_prices (symbol, companyName, marketCap, sector, industry, beta, price, lastAnnualDividend, volume, exchange, exchangeShortName, country, isEtf, isFund, isActivelyTrading, date)
                     VALUES (%(symbol)s, %(companyName)s, %(marketCap)s, %(sector)s, %(industry)s, %(beta)s, %(price)s, %(lastAnnualDividend)s,%(volume)s, %(exchange)s, %(exchangeShortName)s, %(country)s, %(isEtf)s, %(isFund)s, %(isActivelyTrading)s,%(date)s)
                     """
-    execute_batch(conn.cursor(), ingesta_batch, stocks_data)
+    execute_batch(conn.cursor(), ingesta_batch, data_filtered)
 
     conn.commit()
     cursor.close()
