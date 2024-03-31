@@ -12,7 +12,7 @@ username = os.getenv("username")
 password = os.getenv("password")
 
 
-#Endpoint principal a usar
+#Endpoint principal a usar, en el readme se muestra informacion sobre la API y como obtener una key, ya que es una API publica.
 url = 'https://financialmodelingprep.com/api/v3/stock-screener'
 
 
@@ -24,7 +24,7 @@ def data(market):
     response = requests.get(f'{url}?exchange={market}&isActivelyTrading=True&limit=10000&apikey={apikey}')
     stocks_data = response.json()
 
-    # agregando fecha y hora que se extrajo la data
+    # agregando fecha y hora que se extrajo la data, ademas de reemplazar valores 'None' por vacios para las etiquetas de sector, industry, lastAnnualDividend. Se elimina aquellos que contengan 'None' en isEtf, isFund, beta, country
     data_filtered = []
     now = datetime.now()
     date_string = now.strftime("%Y-%m-%d %H:%M:%S")
@@ -38,7 +38,6 @@ def data(market):
 
         
     #Conexion y creacion de la tabla
-
     conn = psycopg2.connect(
                             host='data-engineer-cluster.cyhh5bfevlmn.us-east-1.redshift.amazonaws.com',
                             database='data-engineer-database',
@@ -48,8 +47,6 @@ def data(market):
                             )
 
     cursor = conn.cursor()
-
-
 
     cursor.execute("""
                     CREATE TABLE IF NOT EXISTS leonel_aliaga_v_coderhouse.stocks_prices (
@@ -74,8 +71,7 @@ def data(market):
 
     conn.commit()
 
-
-    #Ingesta de los datos por batch
+    #Ingesta de los datos por batch desde el diccionario a la tabla
     ingesta_batch = """
                     INSERT INTO leonel_aliaga_v_coderhouse.stocks_prices (symbol, companyName, marketCap, sector, industry, beta, price, lastAnnualDividend, volume, exchange, exchangeShortName, country, isEtf, isFund, isActivelyTrading, date)
                     VALUES (%(symbol)s, %(companyName)s, %(marketCap)s, %(sector)s, %(industry)s, %(beta)s, %(price)s, %(lastAnnualDividend)s,%(volume)s, %(exchange)s, %(exchangeShortName)s, %(country)s, %(isEtf)s, %(isFund)s, %(isActivelyTrading)s,%(date)s)
