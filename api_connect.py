@@ -16,7 +16,7 @@ password = os.getenv("password")
 url = 'https://financialmodelingprep.com/api/v3/stock-screener'
 
 
-def data(market):
+def extract_transform(market):
     """
     Funcion para obtener los datos de las diferentes bolsas de valores. Adicionalmente se usa el filtro al endpoint isActivelyTrading=True para obtener aquellos que se encuentran activos. Finalmente carga los datos en una tabla de redshift
     market: nombre del mercado de valores a extraer (NYSE, NASDAQ, EURONEXT, AMEX, TSX, ETF, etc)    
@@ -36,8 +36,12 @@ def data(market):
             stock['date'] = date_string
             data_filtered.append(stock)
 
-        
-    #Conexion y creacion de la tabla
+    return data_filtered
+
+def connect_redshift():        
+    """
+    Conexion y a la tabla
+    """
     conn = psycopg2.connect(
                             host='data-engineer-cluster.cyhh5bfevlmn.us-east-1.redshift.amazonaws.com',
                             database='data-engineer-database',
@@ -45,6 +49,15 @@ def data(market):
                             user=username,
                             password=password
                             )
+
+    return conn
+
+def load_data(conn, data):
+    """
+    Creacion de la tabla si no existiese y carga de data del mercado de NASDAQ
+    """
+    # conn = connect_redshift()
+    # data = extract_transform('NASDAQ')
 
     cursor = conn.cursor()
 
@@ -65,7 +78,7 @@ def data(market):
                         isEtf BOOLEAN,
                         isFund BOOLEAN,
                         isActivelyTrading BOOLEAN,
-                        date TIMESTAMP
+                        date TIMESTAMP NOT NULL
                     )
                     """)
 
@@ -76,12 +89,35 @@ def data(market):
                     INSERT INTO leonel_aliaga_v_coderhouse.stocks_prices (symbol, companyName, marketCap, sector, industry, beta, price, lastAnnualDividend, volume, exchange, exchangeShortName, country, isEtf, isFund, isActivelyTrading, date)
                     VALUES (%(symbol)s, %(companyName)s, %(marketCap)s, %(sector)s, %(industry)s, %(beta)s, %(price)s, %(lastAnnualDividend)s,%(volume)s, %(exchange)s, %(exchangeShortName)s, %(country)s, %(isEtf)s, %(isFund)s, %(isActivelyTrading)s,%(date)s)
                     """
-    execute_batch(conn.cursor(), ingesta_batch, data_filtered)
+    execute_batch(conn.cursor(), ingesta_batch, data)
 
     conn.commit()
     cursor.close()
     conn.close()
 
-if __name__ == '__main__':
 
-    data('NASDAQ')
+
+def create_pk():
+    """
+    Creacion de la llave primaria compuesta (symbol,date)
+    """
+    conn = connect_redshift()
+    cursor = conn.cursor()
+    cursor.execute("""
+                    ALTER TABLE leonel_aliaga_v_coderhouse.stocks_prices
+                    ADD CONSTRAINT pk_stocks_prices PRIMARY KEY (symbol, date);
+                    """)
+    conn.commit()
+    cursor.close()
+    
+def main():
+
+    conn = connect_redshift()
+    data = extract_transform('NASDAQ')
+    load_data(conn, data)
+    conn.close()
+
+if __name__ == '__main__':
+    main()
+    #crear la llave primaria compuesta
+    create_pk()
