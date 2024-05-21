@@ -1,0 +1,46 @@
+[2024-05-20T23:00:03.183+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2024-05-20T23:00:03.203+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: dag_ETL.conexion_redshift scheduled__2024-05-20T22:00:00+00:00 [queued]>
+[2024-05-20T23:00:03.210+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: dag_ETL.conexion_redshift scheduled__2024-05-20T22:00:00+00:00 [queued]>
+[2024-05-20T23:00:03.210+0000] {taskinstance.py:2306} INFO - Starting attempt 1 of 1
+[2024-05-20T23:00:03.222+0000] {taskinstance.py:2330} INFO - Executing <Task(PythonOperator): conexion_redshift> on 2024-05-20 22:00:00+00:00
+[2024-05-20T23:00:03.226+0000] {warnings.py:110} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:61: DeprecationWarning: This process (pid=607) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+
+[2024-05-20T23:00:03.227+0000] {standard_task_runner.py:63} INFO - Started process 608 to run task
+[2024-05-20T23:00:03.228+0000] {standard_task_runner.py:90} INFO - Running: ['***', 'tasks', 'run', 'dag_ETL', 'conexion_redshift', 'scheduled__2024-05-20T22:00:00+00:00', '--job-id', '73', '--raw', '--subdir', 'DAGS_FOLDER/dag.py', '--cfg-path', '/tmp/tmpu3r5rlsz']
+[2024-05-20T23:00:03.228+0000] {standard_task_runner.py:91} INFO - Job 73: Subtask conexion_redshift
+[2024-05-20T23:00:03.259+0000] {task_command.py:426} INFO - Running <TaskInstance: dag_ETL.conexion_redshift scheduled__2024-05-20T22:00:00+00:00 [running]> on host bef3db75e79e
+[2024-05-20T23:00:03.317+0000] {taskinstance.py:2648} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='dag_ETL' AIRFLOW_CTX_TASK_ID='conexion_redshift' AIRFLOW_CTX_EXECUTION_DATE='2024-05-20T22:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2024-05-20T22:00:00+00:00'
+[2024-05-20T23:00:03.318+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2024-05-20T23:00:03.979+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2024-05-20T23:00:03.979+0000] {taskinstance.py:2905} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 465, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 432, in _execute_callable
+    return execute_callable(context=context, **execute_callable_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/baseoperator.py", line 400, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 235, in execute
+    return_value = self.execute_callable()
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 252, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/airflow/dags/api_connect.py", line 53, in connect_redshift
+    conn = psycopg2.connect(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.OperationalError: connection to server at "data-engineer-cluster.cyhh5bfevlmn.us-east-1.redshift.amazonaws.com" (52.44.43.227), port 5439 failed: fe_sendauth: no password supplied
+
+[2024-05-20T23:00:03.987+0000] {taskinstance.py:1206} INFO - Marking task as FAILED. dag_id=dag_ETL, task_id=conexion_redshift, run_id=scheduled__2024-05-20T22:00:00+00:00, execution_date=20240520T220000, start_date=20240520T230003, end_date=20240520T230003
+[2024-05-20T23:00:03.998+0000] {standard_task_runner.py:110} ERROR - Failed to execute job 73 for task conexion_redshift (connection to server at "data-engineer-cluster.cyhh5bfevlmn.us-east-1.redshift.amazonaws.com" (52.44.43.227), port 5439 failed: fe_sendauth: no password supplied
+; 608)
+[2024-05-20T23:00:04.042+0000] {local_task_job_runner.py:240} INFO - Task exited with return code 1
+[2024-05-20T23:00:04.055+0000] {taskinstance.py:3498} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2024-05-20T23:00:04.056+0000] {local_task_job_runner.py:222} INFO - ::endgroup::
