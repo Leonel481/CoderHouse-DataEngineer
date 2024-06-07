@@ -8,6 +8,7 @@ from airflow.models import XCom
 import os
 
 import smtplib
+from email import message
 
 apikey = os.getenv("apikey")
 username = os.getenv("username")
@@ -25,7 +26,7 @@ default_args = {
     'email': ['leonel.aliaga.v@gmail.com'],  # Dirección de correo electrónico de destino
     'email_on_failure': True,  # Envía correo electrónico en caso de fallo
     'email_on_retry': False,
-    'task_instance_trigger_send_email': True, # Enviar todo el log al correo electronico
+    # 'task_instance_trigger_send_email': True, # Enviar todo el log al correo electronico
     }
 
 ETL_dag =  DAG(

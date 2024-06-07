@@ -27,7 +27,7 @@ def extract_transform(market,apikey, **kwargs):
         stock['sector'] = '' if stock['sector'] is None else stock['sector']
         stock['industry'] = '' if stock['industry'] is None else stock['industry']
         stock['lastAnnualDividend'] = 0 if stock['lastAnnualDividend'] is None else stock['lastAnnualDividend']
-        if stock['isEtf'] is not None and stock['isFundasdsa'] is not None and stock['beta'] is not None and stock['country'] is not None:        
+        if stock['isEtf'] is not None and stock['isFund'] is not None and stock['beta'] is not None and stock['country'] is not None:        
             stock['date'] = date_string
             data_filtered.append(stock)
     # print(stocks_data)
