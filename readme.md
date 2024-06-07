@@ -5,11 +5,11 @@ En la pagina https://site.financialmodelingprep.com/ encontra mas informacion so
 
 **Tareas del Dag:
 
-![Dag](https://github.com/RE-Vincent/Retail_Computer_Prices/blob/main/Imagen/Arquitectura_proyecto_SCP.svg)
+![Dag](https://github.com/Leonel481/CoderHouse-DataEngineer/blob/master/Imagen/ETL_data_dag.png)
 
 **Ejemplo de envio de log al correo cuando falla la dag:
 
-![Dag](https://github.com/RE-Vincent/Retail_Computer_Prices/blob/main/Imagen/Arquitectura_proyecto_SCP.svg)
+![Dag](https://github.com/Leonel481/CoderHouse-DataEngineer/blob/master/Imagen/log_email.png)
 
 
 **Reglas y transformaciones:**
