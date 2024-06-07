@@ -1,18 +1,18 @@
-**Proyecto de consumo de APIS e ingesta a Redshift**
+# Proyecto de consumo de APIS e ingesta a Redshift
 
 La API publica que se comsume en el proyecto es de la bolsa de valores.
 En la pagina https://site.financialmodelingprep.com/ encontra mas informacion sobre la API.
 
-**Tareas del Dag:
+**Tareas del Dag:**
 
 ![Dag](https://github.com/Leonel481/CoderHouse-DataEngineer/blob/master/Imagen/ETL_data_dag.png)
 
-**Ejemplo de envio de log al correo cuando falla la dag:
+**Ejemplo de envio de log al correo cuando falla la dag:**
 
 ![Dag](https://github.com/Leonel481/CoderHouse-DataEngineer/blob/master/Imagen/log_email.png)
 
 
-**Reglas y transformaciones:**
+## Reglas y transformaciones:
 
 Se eligio los datos de acciones del indice de NASDAQ, ademas que se considero las siguientes reglas para la tabla:
 
@@ -34,3 +34,9 @@ Se eligio los datos de acciones del indice de NASDAQ, ademas que se considero la
  - date : Fecha y hora que se realiza la consulta de la api
 
 Nota: Para la conexion a la API es necesario una key, dicha key se genera al registrarse en la pagina o ingresar a la pagina con una cuenta google.
+
+## Configuracion de correo para mensajes airflow:
+
+- Configurar un correo gmail con autenticacion a 2 pasos
+- Configurar una nueva contraseña en la seccion aplicaciones menos seguras
+- El correo y la contraseña generada se usaran para SMTP airflow
