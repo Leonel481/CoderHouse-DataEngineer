@@ -7,14 +7,25 @@ from airflow.hooks.base import BaseHook
 from airflow.models import XCom
 import os
 
+import smtplib
+
 apikey = os.getenv("apikey")
 username = os.getenv("username")
 password = os.getenv("password")
+
+
+# Configuracion de envio de correo en caso el dag falle en ejecutarse
+# Configuracion de los parametros y el correo de destino. 
+# las credenciales para que utilice airflow como correo de remitente se configuro en airflow.cfg
 
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
     'start_date': datetime(2024, 5, 5),
+    'email': ['leonel.aliaga.v@gmail.com'],  # Dirección de correo electrónico de destino
+    'email_on_failure': True,  # Envía correo electrónico en caso de fallo
+    'email_on_retry': False,
+    'task_instance_trigger_send_email': True, # Enviar todo el log al correo electronico
     }
 
 ETL_dag =  DAG(
@@ -23,9 +34,11 @@ ETL_dag =  DAG(
     catchup = False,
     description = 'ETL API acciones de bolsa',
     schedule_interval = '0 * * * *'
-    )
+)
 
-task_1 = BashOperator(task_id='primera_tarea',
+
+task_1 = BashOperator(
+    task_id='primera_tarea',
     bash_command='echo Iniciando...'
 )
 

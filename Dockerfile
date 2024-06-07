@@ -5,6 +5,7 @@ FROM apache/airflow:2.9.1
 USER root
 
 COPY requirements.txt .
+COPY config/airflow.cfg /opt/airflow/config/
 
 USER airflow
 
