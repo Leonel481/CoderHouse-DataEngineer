@@ -26,7 +26,7 @@ default_args = {
     'email': ['leonel.aliaga.v@gmail.com'],  # Dirección de correo electrónico de destino
     'email_on_failure': True,  # Envía correo electrónico en caso de fallo
     'email_on_retry': False,
-    # 'task_instance_trigger_send_email': True, # Enviar todo el log al correo electronico
+    'task_instance_trigger_send_email': True,
     }
 
 ETL_dag =  DAG(

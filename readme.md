@@ -1,8 +1,21 @@
-Proyecto de consumo de APIS e ingesta a Redshift
+**Proyecto de consumo de APIS e ingesta a Redshift**
 
 La API publica que se comsume en el proyecto es de la bolsa de valores.
 En la pagina https://site.financialmodelingprep.com/ encontra mas informacion sobre la API.
+
+**Tareas del Dag:
+
+![Dag](https://github.com/RE-Vincent/Retail_Computer_Prices/blob/main/Imagen/Arquitectura_proyecto_SCP.svg)
+
+**Ejemplo de envio de log al correo cuando falla la dag:
+
+![Dag](https://github.com/RE-Vincent/Retail_Computer_Prices/blob/main/Imagen/Arquitectura_proyecto_SCP.svg)
+
+
+**Reglas y transformaciones:**
+
 Se eligio los datos de acciones del indice de NASDAQ, ademas que se considero las siguientes reglas para la tabla:
+
  - symbol : Es el simbolo o etiqueta de la accion, el valor no puede ser nulo o None.
  - companyName : Nombre de la empresa, el valor no puede ser nulo o None.
  - marketCap : Capitalizacion del mercado de la accion.
